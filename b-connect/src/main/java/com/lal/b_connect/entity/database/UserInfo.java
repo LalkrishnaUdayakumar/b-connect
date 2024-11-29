@@ -25,6 +25,8 @@ public class UserInfo {
     private String password;
     private String role;
     private boolean donor;
+    private String bloodGroup;
+
 
 }
 

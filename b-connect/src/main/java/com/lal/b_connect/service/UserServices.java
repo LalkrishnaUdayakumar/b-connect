@@ -9,8 +9,10 @@ import com.lal.b_connect.exception.ErrorCode;
 import com.lal.b_connect.exception.ErrorResponseUtil;
 import com.lal.b_connect.exception.UserManagementException;
 import com.lal.b_connect.service.reponse.BaseResponse;
+import com.lal.b_connect.service.reponse.FindDonorResponse;
 import com.lal.b_connect.service.reponse.LoginUserResponse;
 import com.lal.b_connect.service.request.CreateUserRequest;
+import com.lal.b_connect.service.request.FindDonorRequest;
 import com.lal.b_connect.service.request.LoginUserRequest;
 import com.lal.b_connect.service.request.SaveProfilePhotoRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -131,6 +137,57 @@ public class UserServices implements UserInterface {
             return ErrorResponseUtil.createErrorResponse(resp, HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred, while saving photo");
         }
         return resp;
+    }
+
+    @Override
+    public FindDonorResponse findDonor(FindDonorRequest request) {
+        FindDonorResponse resp = new FindDonorResponse();
+        try {
+            // Validate blood group
+            String bloodGroup = validateBloodGroup(request.getBloodGroup());
+
+            // Find eligible donors
+            List<UserInfo> eligibleDonors = repository.findByBloodGroup(bloodGroup);
+
+            if (eligibleDonors.isEmpty()) {
+                throw new UserManagementException(ErrorCode.getError(ErrorCode.NO_ELIGIBLE_DONORS));
+            }
+
+            resp.setUserInfo(eligibleDonors);
+            resp.setResponseId(HttpStatus.OK.value());
+            resp.setResponseMessage("Eligible donors found");
+            resp.setResponseDescription("Successfully retrieved eligible donor details");
+
+        } catch (UserManagementException e) {
+            // Handle specific user management exceptions
+            log.error("Donor search error", e);
+            resp.setResponseId(e.getError().getErrorId());
+            resp.setResponseMessage(e.getError().getErrorMessage());
+        } catch (Exception e) {
+            // Handle unexpected errors
+            log.error("Unexpected error in donor search", e);
+            resp.setResponseId(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            resp.setResponseMessage("Internal server error");
+        }
+        return resp;
+    }
+
+    private String validateBloodGroup(String bloodGroup) throws UserManagementException {
+        if (!isValidBloodGroup(bloodGroup)) {
+            throw new UserManagementException(ErrorCode.getError(ErrorCode.INVALID_BLOOD_GROUP));
+        }
+        return bloodGroup.toUpperCase();
+    }
+
+    private boolean isValidBloodGroup(String bloodGroup) {
+        if (bloodGroup == null) {
+            return false;
+        }
+
+        // Regex pattern for valid blood groups
+        String bloodGroupRegex = "^(A|B|AB|O)[+-]$";
+
+        return bloodGroup.trim().toUpperCase().matches(bloodGroupRegex);
     }
 
     private String getAuthenticatedUserPhoneNumber() throws UserManagementException {

@@ -13,6 +13,8 @@ public class ErrorCode {
     public static final int INVALID_PHONE_NUMBER = 502;
     public static final int USER_NOT_EXIST = 503;
     public static final int ERR_UNAUTHORIZED_ACCESS = 504;
+    public static final int INVALID_BLOOD_GROUP = 505;
+    public static final int NO_ELIGIBLE_DONORS = 505;
 
     private static void populateMap() {
         addError(new ValidationError(USER_ALREADY_EXIST, "USER ALREADY EXIST",
@@ -29,6 +31,10 @@ public class ErrorCode {
 
         addError(new ValidationError(ERR_UNAUTHORIZED_ACCESS, "ERR_UNAUTHORIZED_ACCESS",
                 "Unauthorized Access, User is not authorized to perform this action."));
+        addError(new ValidationError(INVALID_BLOOD_GROUP, "INVALID_BLOOD_GROUP",
+                "Invalid blood group,Blood group format is incorrect"));
+        addError(new ValidationError(INVALID_BLOOD_GROUP, "NO_ELIGIBLE_DONORS",
+                "Donors not found..!"));
     }
 
     private static void addError(ValidationError error) {
