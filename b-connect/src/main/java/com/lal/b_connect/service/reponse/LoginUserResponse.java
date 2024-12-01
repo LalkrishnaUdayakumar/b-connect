@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginUserResponse extends BaseResponse{
 
-    private String userName;
-    private Boolean donor;
+    private UserData userdetails;
     private String token;
 }

@@ -74,12 +74,12 @@ public class SecurityConfiguration {
 
     //    @Bean
 //    public UserDetailsService userDetailsService() {
-//        UserDetails normalUser = User.builder()
+//        UserData normalUser = User.builder()
 //                .username("user")
 //                .password("lal")
 //                .roles("USER")
 //                .build();
-//        UserDetails adminUser = User.builder()
+//        UserData adminUser = User.builder()
 //                .username("admin")
 //                .password("lal")
 //                .roles("USER")

@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SaveProfilePhotoRequest {
     private byte[] imageBytes;
-    private String phoneNumber;
+
 }

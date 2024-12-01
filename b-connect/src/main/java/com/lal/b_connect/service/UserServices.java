@@ -11,6 +11,7 @@ import com.lal.b_connect.exception.UserManagementException;
 import com.lal.b_connect.service.reponse.BaseResponse;
 import com.lal.b_connect.service.reponse.FindDonorResponse;
 import com.lal.b_connect.service.reponse.LoginUserResponse;
+import com.lal.b_connect.service.reponse.UserData;
 import com.lal.b_connect.service.request.CreateUserRequest;
 import com.lal.b_connect.service.request.FindDonorRequest;
 import com.lal.b_connect.service.request.LoginUserRequest;
@@ -25,9 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -88,9 +87,18 @@ public class UserServices implements UserInterface {
                                 request.getPhoneNumber(), request.getPassword()));
                         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getPhoneNumber());
                         String token = jwtService.generateToken(userDetails);
+                        UserData userData = new UserData();
                         resp.setToken(token);
-                        resp.setUserName(user.getUserName());
-                        resp.setDonor(user.isDonor());
+                        userData.setImageBytes(user.getImageBytes());
+                        userData.setUserName(user.getUserName());
+                        userData.setPhoneNumber(user.getPhoneNumber());
+                        userData.setGender(user.getGender());
+                        userData.setPlace(user.getPlace());
+                        userData.setNumberOfTimesDonates(user.getNumberOfTimesDonates());
+                        userData.setLastDateOfDonation(user.getLastDateOfDonation());
+                        userData.setDonor(user.isDonor());
+                        userData.setBloodGroup(user.getBloodGroup());
+                        resp.setUserdetails(userData);
                         log.info("Login successfully..!");
                         resp.setResponseId(HttpStatus.OK.value());
                         resp.setResponseMessage("Login successfully..!");
@@ -125,8 +133,8 @@ public class UserServices implements UserInterface {
                 repository.save(user);
                 log.info("Image successfully saved..!");
                 resp.setResponseId(HttpStatus.OK.value());
-                resp.setResponseMessage("Image successfully saved..!");
-                resp.setResponseDescription("Your profile photo successfully saved in database!");
+                resp.setResponseMessage("success");
+                resp.setResponseDescription("Image successfully saved..!");
             }
         } catch (UserManagementException e) {
             log.error("Error while save photo - Status: {}, Message: {}, Description: {}",
