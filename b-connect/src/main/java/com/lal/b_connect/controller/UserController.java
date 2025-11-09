@@ -1,22 +1,19 @@
 package com.lal.b_connect.controller;
 
 
+import com.lal.b_connect.pojo.request.usermangement.*;
 import com.lal.b_connect.service.UserInterface;
-import com.lal.b_connect.service.reponse.BaseResponse;
-import com.lal.b_connect.service.reponse.FindDonorResponse;
-import com.lal.b_connect.service.reponse.LoginUserResponse;
-import com.lal.b_connect.service.request.CreateUserRequest;
-import com.lal.b_connect.service.request.FindDonorRequest;
-import com.lal.b_connect.service.request.LoginUserRequest;
-import com.lal.b_connect.service.request.SaveProfilePhotoRequest;
+import com.lal.b_connect.pojo.reponse.BaseResponse;
+import com.lal.b_connect.pojo.reponse.FindDonorResponse;
+import com.lal.b_connect.pojo.reponse.LoginUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 @Validated
 @RestController
@@ -33,6 +30,11 @@ public class UserController {
     private static final String FIND_DONOR = "b-connect/findDonor";
 
 
+    @RequestMapping(value = "/{path:[^\\.]*}")
+    public String redirect() {
+        return "forward:/index.html";
+    }
+
     @PostMapping(value = CREATE_USER)
     public BaseResponse createUser(@RequestBody CreateUserRequest request,
                                    BindingResult bindingResult) throws Exception {
@@ -44,6 +46,26 @@ public class UserController {
                                        BindingResult bindingResult) throws Exception {
         return userInterface.loginUser(request);
     }
+
+    @PostMapping(value = FORGET_PASSWORD)
+    public BaseResponse forgetPassword(@RequestBody ForgetPasswordRequest request,
+                                       BindingResult bindingResult) throws Exception {
+        return userInterface.forgetPassword(request);
+    }
+
+    @PostMapping(value = CHANGE_PASSWORD)
+    public BaseResponse changePassword(@RequestBody ChangePasswordRequest request,
+                                       BindingResult bindingResult) throws Exception {
+        return userInterface.changePassword(request);
+    }
+
+    @PostMapping(value = "b-connect/updateUser")
+    public BaseResponse updateUser(@RequestBody UpdateUserRequest request,
+                                   BindingResult bindingResult) throws Exception {
+        return userInterface.updateUser(request);
+    }
+
+
     @PostMapping(value = SAVE_PROFILE_PHOTO)
     public BaseResponse saveProfilePhoto(@RequestBody SaveProfilePhotoRequest request,
                                               BindingResult bindingResult) throws Exception {
@@ -55,4 +77,6 @@ public class UserController {
                                              BindingResult bindingResult) throws Exception {
         return userInterface.findDonor(request);
     }
+
+
 }

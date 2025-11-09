@@ -1,7 +1,7 @@
 package com.lal.b_connect.exception;
 
 import org.springframework.http.HttpStatus;
-import com.lal.b_connect.service.reponse.BaseResponse;
+import com.lal.b_connect.pojo.reponse.BaseResponse;
 
 public class ErrorResponseUtil {
 

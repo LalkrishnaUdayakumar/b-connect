@@ -2,16 +2,11 @@ package com.lal.b_connect.service;
 
 
 import com.lal.b_connect.exception.UserManagementException;
-import com.lal.b_connect.service.reponse.BaseResponse;
-import com.lal.b_connect.service.reponse.FindDonorResponse;
-import com.lal.b_connect.service.reponse.LoginUserResponse;
-import com.lal.b_connect.service.request.CreateUserRequest;
-import com.lal.b_connect.service.request.FindDonorRequest;
-import com.lal.b_connect.service.request.LoginUserRequest;
-import com.lal.b_connect.service.request.SaveProfilePhotoRequest;
+import com.lal.b_connect.pojo.reponse.BaseResponse;
+import com.lal.b_connect.pojo.reponse.FindDonorResponse;
+import com.lal.b_connect.pojo.reponse.LoginUserResponse;
+import com.lal.b_connect.pojo.request.usermangement.*;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 
 @Service
@@ -23,5 +18,14 @@ public interface UserInterface {
 
     BaseResponse saveProfilePhoto(SaveProfilePhotoRequest request);
 
+    BaseResponse forgetPassword(ForgetPasswordRequest request);
+
+    BaseResponse changePassword(ChangePasswordRequest request);
+
+    BaseResponse updateUser(UpdateUserRequest request);
+
+
     FindDonorResponse findDonor(FindDonorRequest request);
+
+
 }

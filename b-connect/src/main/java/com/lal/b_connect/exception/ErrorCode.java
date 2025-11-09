@@ -15,6 +15,8 @@ public class ErrorCode {
     public static final int ERR_UNAUTHORIZED_ACCESS = 504;
     public static final int INVALID_BLOOD_GROUP = 505;
     public static final int NO_ELIGIBLE_DONORS = 505;
+    public static final int REQUEST_NOT_FOUND = 506;
+
 
     private static void populateMap() {
         addError(new ValidationError(USER_ALREADY_EXIST, "USER ALREADY EXIST",
@@ -35,6 +37,8 @@ public class ErrorCode {
                 "Invalid blood group,Blood group format is incorrect"));
         addError(new ValidationError(INVALID_BLOOD_GROUP, "NO_ELIGIBLE_DONORS",
                 "Donors not found..!"));
+        addError(new ValidationError(REQUEST_NOT_FOUND, "REQUEST NOT FOUND",
+                "No blood request found for the given ID or requester."));
     }
 
     private static void addError(ValidationError error) {

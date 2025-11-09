@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
+
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfiguration {
@@ -30,9 +32,21 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
+                    registry.requestMatchers(
+                            "/",
+                            "/index.html",
+                            "/*.json",
+                            "/*.js",
+                            "/*.css",
+                            "/assets/**",
+                            "/flutter_service_worker.js",
+                            "/manifest.json"
+                    ).permitAll();
                     registry.requestMatchers("/b-connect/signup").permitAll();
                     registry.requestMatchers("/b-connect/login").permitAll();
                     registry.requestMatchers("/b-connect/saveProfilePhoto").authenticated();
+                    // Permit all routes for Flutter web
+                    registry.requestMatchers("/**").permitAll();
 
 //                    registry.requestMatchers("autocab/driver/**").hasRole("DRIVER");
 //                    registry.requestMatchers("autocab/user/**").hasRole("USER");
@@ -43,6 +57,7 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)// Disable form login
                 .build();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager() {
@@ -86,6 +101,8 @@ public class SecurityConfiguration {
 //                .build();
 //        return new InMemoryUserDetailsManager(adminUser, normalUser);
 //    }
+
+
 
 
 }
